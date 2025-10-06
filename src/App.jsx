@@ -1,35 +1,31 @@
 import React from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { useApp } from "./context/AppContext";
+import Sidebar from "./components/Sidebar";
+import Header from "./components/Header";
+
 import Home from "./pages/Home";
-import Quiz from "./pages/Quiz";
+import QuizPage from "./pages/QuizPage";
 import Chat from "./pages/Chat";
+import Dashboard from "./pages/Dashboard";
 
 export default function App() {
-  return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
-      <header className="bg-white shadow">
-        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-          <Link to="/" className="text-xl font-semibold">
-            BeyondChats - FSWD
-          </Link>
-          <nav className="space-x-4 text-sm">
-            <Link to="/quiz" className="hover:underline">
-              Quiz
-            </Link>
-            <Link to="/chat" className="hover:underline">
-              Chat
-            </Link>
-          </nav>
-        </div>
-      </header>
+  const { currentView } = useApp();
 
-      <main className="container mx-auto px-4 py-6">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/quiz" element={<Quiz />} />
-          <Route path="/chat" element={<Chat />} />
-        </Routes>
-      </main>
+  return (
+    <div className="flex h-screen bg-gray-50 overflow-hidden">
+      {/* Sidebar */}
+      <Sidebar />
+
+      {/* Main content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <Header />
+        <main className="flex-1 overflow-auto">
+          {currentView === "home" && <Home />}
+          {currentView === "quiz" && <QuizPage />}
+          {currentView === "chat" && <Chat />}
+          {currentView === "dashboard" && <Dashboard />}
+        </main>
+      </div>
     </div>
   );
 }

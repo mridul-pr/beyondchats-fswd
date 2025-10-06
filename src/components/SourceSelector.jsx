@@ -1,61 +1,54 @@
-import React from "react";
+import { Upload } from "lucide-react";
+import { useApp } from "../context/AppContext";
 
-const seeded = [
-  {
-    id: "ncert-xi-phy-1",
-    name: "NCERT XI Physics — Sample 1",
-    src: "/pdfs/ncert-sample1.pdf",
-  },
-  {
-    id: "ncert-xi-phy-2",
-    name: "NCERT XI Physics — Sample 2",
-    src: "/pdfs/ncert-sample2.pdf",
-  },
-];
+function SourceSelector() {
+  const { pdfs, selectedPdf, setSelectedPdf, setPdfs } = useApp();
 
-export default function SourceSelector({ onSelect, selected }) {
-  const handleFile = (e) => {
-    const f = e.target.files?.[0];
-    if (!f) return;
-    const url = URL.createObjectURL(f);
-    onSelect({ id: f.name, name: f.name, src: url, file: f });
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type === "application/pdf") {
+      const newPdf = {
+        id: Date.now().toString(),
+        name: file.name,
+        url: URL.createObjectURL(file),
+        file: file,
+        pages: 0,
+      };
+      setPdfs((prev) => [...prev, newPdf]);
+      setSelectedPdf(newPdf);
+    }
   };
 
   return (
-    <div className="space-y-4">
-      <div className="bg-white p-4 rounded shadow">
-        <h3 className="font-semibold mb-2">Source selector</h3>
+    <div className="flex items-center gap-2">
+      <select
+        value={selectedPdf?.id || ""}
+        onChange={(e) => {
+          const pdf = pdfs.find((p) => p.id === e.target.value);
+          setSelectedPdf(pdf || null);
+        }}
+        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+      >
+        <option value="">Select PDF...</option>
+        <option value="all">All Uploaded PDFs</option>
+        {pdfs.map((pdf) => (
+          <option key={pdf.id} value={pdf.id}>
+            {pdf.name}
+          </option>
+        ))}
+      </select>
 
-        <button
-          className="text-sm underline mb-2"
-          onClick={() =>
-            onSelect({ id: "all", name: "All uploaded PDFs", src: null })
-          }
-        >
-          All uploaded PDFs
-        </button>
-
-        <div className="mt-2 space-y-1">
-          {seeded.map((s) => (
-            <div
-              key={s.id}
-              className={`p-2 rounded cursor-pointer ${
-                selected?.id === s.id
-                  ? "bg-blue-50 border-l-4 border-blue-400"
-                  : "hover:bg-gray-50"
-              }`}
-              onClick={() => onSelect(s)}
-            >
-              {s.name}
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-4">
-          <label className="block text-sm mb-1">Upload PDF</label>
-          <input type="file" accept="application/pdf" onChange={handleFile} />
-        </div>
-      </div>
+      <label className="cursor-pointer p-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+        <Upload className="w-5 h-5" />
+        <input
+          type="file"
+          accept=".pdf"
+          onChange={handleFileUpload}
+          className="hidden"
+        />
+      </label>
     </div>
   );
 }
+
+export default SourceSelector;

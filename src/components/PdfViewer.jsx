@@ -1,56 +1,49 @@
-import React, { useState } from "react";
-import { Document, Page, pdfjs } from "react-pdf";
+import { ChevronLeft, ChevronRight, FileText } from "lucide-react";
+import { useApp } from "../context/AppContext";
+import { useState } from "react";
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+function PDFViewer() {
+  const { selectedPdf } = useApp();
+  const [currentPage, setCurrentPage] = useState(1);
 
-export default function PdfViewer({ file }) {
-  const [numPages, setNumPages] = useState(null);
-  const [pageNumber, setPageNumber] = useState(1);
-
-  function onDocumentLoadSuccess({ numPages }) {
-    setNumPages(numPages);
-    setPageNumber(1);
-  }
-
-  if (!file) {
-    return (
-      <div className="p-6 bg-white rounded shadow">
-        No PDF selected. Choose a source or upload a PDF.
-      </div>
-    );
-  }
+  if (!selectedPdf) return null;
 
   return (
-    <div className="bg-white p-4 rounded shadow">
-      <div className="mb-2 font-semibold">{file.name || "Selected PDF"}</div>
-
-      <div className="flex justify-center">
-        <Document file={file.src || file} onLoadSuccess={onDocumentLoadSuccess}>
-          <Page pageNumber={pageNumber} />
-        </Document>
+    <div className="bg-white rounded-xl shadow-lg p-6">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-xl font-semibold">PDF Viewer</h3>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+            className="p-2 hover:bg-gray-100 rounded"
+            disabled={currentPage === 1}
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <span className="text-sm">
+            Page {currentPage} / {selectedPdf.pages || "?"}
+          </span>
+          <button
+            onClick={() => setCurrentPage((p) => p + 1)}
+            className="p-2 hover:bg-gray-100 rounded"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+        </div>
       </div>
 
-      <div className="flex items-center justify-between mt-4 text-sm">
-        <div>
-          Page {pageNumber} / {numPages || "-"}
-        </div>
-        <div>
-          <button
-            onClick={() => setPageNumber((p) => Math.max(1, p - 1))}
-            className="px-2 py-1 mr-2 bg-gray-100 rounded"
-          >
-            Prev
-          </button>
-          <button
-            onClick={() =>
-              setPageNumber((p) => Math.min(numPages || p + 1, p + 1))
-            }
-            className="px-2 py-1 bg-gray-100 rounded"
-          >
-            Next
-          </button>
+      <div className="bg-gray-100 rounded-lg h-96 flex items-center justify-center">
+        <div className="text-center text-gray-500">
+          <FileText className="w-16 h-16 mx-auto mb-4 opacity-50" />
+          <p className="font-medium">{selectedPdf.name}</p>
+          <p className="text-sm mt-2">
+            PDF viewing requires pdf.js integration
+          </p>
+          <p className="text-xs mt-1">See implementation notes in README</p>
         </div>
       </div>
     </div>
   );
 }
+
+export default PDFViewer;
