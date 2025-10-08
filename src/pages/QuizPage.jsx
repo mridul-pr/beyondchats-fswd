@@ -2,7 +2,7 @@ import { FileText, BookOpen, MessageSquare, Edit } from "lucide-react";
 import { useApp } from "../context/AppContext";
 import { useState } from "react";
 import { generateQuiz, scoreOpenEndedAnswers } from "../services/api";
-import PDFViewer from "../components/PDFViewer";
+import PdfViewer from "../components/PdfViewer";
 
 function QuizPage() {
   const { selectedPdf, setQuizAttempts } = useApp();
@@ -401,7 +401,7 @@ function QuizPage() {
           activeTab === "pdf" ? "block" : "hidden"
         } md:block md:w-1/2 border-l border-gray-200`}
       >
-        <PDFViewer pdfUrl={selectedPdf.url} pdfName={selectedPdf.name} />
+        <PdfViewer pdfUrl={selectedPdf.url} pdfName={selectedPdf.name} />
       </div>
     </div>
   );
