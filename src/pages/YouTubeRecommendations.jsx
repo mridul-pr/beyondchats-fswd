@@ -60,6 +60,10 @@ function YouTubeRecommendations() {
       const formData = new FormData();
       formData.append("topics", topics);
 
+      if (selectedPdf?.file) {
+        formData.append("pdf_file", selectedPdf.file);
+      }
+
       const res = await fetch(`${BASE_URL}/youtube-recommendations`, {
         method: "POST",
         body: formData,

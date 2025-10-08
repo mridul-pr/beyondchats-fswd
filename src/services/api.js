@@ -18,34 +18,28 @@ export const uploadPDF = async (file) => {
   }
 
   const data = await res.json();
-
-  if (!data.success) {
-    throw new Error(data.error || "PDF upload failed");
-  }
-
+  if (!data.success) throw new Error(data.error || "PDF upload failed");
   return data;
 };
 
 /**
- * Select/load a PDF into the backend vector database
- * @param {string} pdfName - Name of the PDF file
+ * Tell the backend to load a specific PDF into its memory.
+ * @param {string} filename - The name of the PDF file.
  */
-export const selectPDF = async (pdfName) => {
+export const selectPDF = async (filename) => {
   const formData = new FormData();
-  formData.append("pdf_name", pdfName);
+  formData.append("filename", filename);
 
   const res = await fetch(`${BASE_URL}/select-pdf`, {
     method: "POST",
     body: formData,
   });
 
-  if (!res.ok) {
-    throw new Error(`PDF selection failed: ${res.statusText}`);
-  }
-
+  if (!res.ok) throw new Error(`PDF selection failed: ${res.statusText}`);
   const data = await res.json();
-
-  return data; // Don't throw on !success, let caller handle
+  if (!data.success)
+    throw new Error(data.error || "Failed to select PDF on backend");
+  return data;
 };
 
 /**
@@ -53,17 +47,12 @@ export const selectPDF = async (pdfName) => {
  */
 export const getVectorDBStatus = async () => {
   const res = await fetch(`${BASE_URL}/vectordb-status`);
-
-  if (!res.ok) {
-    throw new Error(`Status check failed: ${res.statusText}`);
-  }
-
+  if (!res.ok) throw new Error(`Status check failed: ${res.statusText}`);
   return await res.json();
 };
 
 /**
  * Chat with AI on selected PDF (simple version)
- * @param {string} query - user's question
  */
 export const chatWithPDF = async (query) => {
   const formData = new FormData();
@@ -73,23 +62,14 @@ export const chatWithPDF = async (query) => {
     method: "POST",
     body: formData,
   });
-
-  if (!res.ok) {
-    throw new Error(`Chat request failed: ${res.statusText}`);
-  }
-
+  if (!res.ok) throw new Error(`Chat request failed: ${res.statusText}`);
   const data = await res.json();
-
-  if (!data.success) {
-    throw new Error(data.error || "Chat request failed");
-  }
-
+  if (!data.success) throw new Error(data.error || "Chat request failed");
   return data;
 };
 
 /**
  * Chat with AI with citations
- * @param {string} query - user's question
  */
 export const chatWithCitations = async (query) => {
   const formData = new FormData();
@@ -99,54 +79,58 @@ export const chatWithCitations = async (query) => {
     method: "POST",
     body: formData,
   });
-
-  if (!res.ok) {
-    throw new Error(`Chat request failed: ${res.statusText}`);
-  }
-
+  if (!res.ok) throw new Error(`Chat request failed: ${res.statusText}`);
   const data = await res.json();
-
-  if (!data.success) {
-    throw new Error(data.error || "Chat request failed");
-  }
-
+  if (!data.success) throw new Error(data.error || "Chat request failed");
   return data;
 };
 
 /**
  * Generate quiz from PDF
- * @param {string} topic - PDF name or topic
  */
 export const generateQuiz = async (topic) => {
   const formData = new FormData();
   formData.append("topic", topic);
+  formData.append(
+    "instruction",
+    "Generate quiz questions strictly from the content of the selected student's PDF. Do NOT use any external or general knowledge. If insufficient data, reply with 'Not enough information in the PDF.'"
+  );
 
   const res = await fetch(`${BASE_URL}/quiz`, {
     method: "POST",
     body: formData,
   });
 
-  if (!res.ok) {
-    throw new Error(`Quiz generation failed: ${res.statusText}`);
-  }
-
+  if (!res.ok) throw new Error(`Quiz generation failed: ${res.statusText}`);
   const data = await res.json();
-
-  if (!data.success) {
-    throw new Error(data.error || "Quiz generation failed");
-  }
-
-  // Validate quiz structure
+  if (!data.success) throw new Error(data.error || "Quiz generation failed");
   if (!data.quiz || !Array.isArray(data.quiz)) {
     throw new Error("Invalid quiz format received from server");
   }
+  return data;
+};
 
+/**
+ * Get scores for open-ended questions from the backend
+ */
+export const scoreOpenEndedAnswers = async (quiz, answers) => {
+  const formData = new FormData();
+  formData.append("quiz_data", JSON.stringify(quiz));
+  formData.append("answers", JSON.stringify(answers));
+
+  const res = await fetch(`${BASE_URL}/score-answers`, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!res.ok) throw new Error(`Scoring request failed: ${res.statusText}`);
+  const data = await res.json();
+  if (!data.success) throw new Error(data.error || "Failed to score answers");
   return data;
 };
 
 /**
  * Get YouTube video recommendations
- * @param {string} topics - Comma-separated topics
  */
 export const getYouTubeRecommendations = async (topics) => {
   const formData = new FormData();
@@ -157,23 +141,16 @@ export const getYouTubeRecommendations = async (topics) => {
     body: formData,
   });
 
-  if (!res.ok) {
+  if (!res.ok)
     throw new Error(`YouTube recommendations failed: ${res.statusText}`);
-  }
-
   const data = await res.json();
-
-  if (!data.success) {
+  if (!data.success)
     throw new Error(data.error || "Failed to get recommendations");
-  }
-
   return data;
 };
 
 /**
  * Analyze quiz attempt
- * @param {Object} quiz - Quiz questions
- * @param {Object} answers - User answers
  */
 export const analyzeQuizAttempt = async (quiz, answers) => {
   const formData = new FormData();
@@ -185,16 +162,27 @@ export const analyzeQuizAttempt = async (quiz, answers) => {
     body: formData,
   });
 
-  if (!res.ok) {
-    throw new Error(`Analysis failed: ${res.statusText}`);
-  }
-
+  if (!res.ok) throw new Error(`Analysis failed: ${res.statusText}`);
   const data = await res.json();
+  if (!data.success) throw new Error(data.error || "Analysis failed");
+  return data;
+};
 
-  if (!data.success) {
-    throw new Error(data.error || "Analysis failed");
-  }
+/**
+ * ✅ NEW: Get AI-generated quiz feedback and weak topic insights
+ * @param {Array} answers - Array of student answers with question, ideal answer, and topic
+ */
+export const getQuizFeedback = async (answers) => {
+  const res = await fetch(`${BASE_URL}/quiz-feedback`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ answers }),
+  });
 
+  if (!res.ok) throw new Error(`Feedback request failed: ${res.statusText}`);
+  const data = await res.json();
+  if (!data.success)
+    throw new Error(data.error || "Feedback generation failed");
   return data;
 };
 

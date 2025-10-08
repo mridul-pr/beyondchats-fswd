@@ -1,12 +1,5 @@
 import { useState } from "react";
-import {
-  ChevronLeft,
-  ChevronRight,
-  ZoomIn,
-  ZoomOut,
-  Maximize2,
-  FileText,
-} from "lucide-react";
+import { ZoomIn, ZoomOut, Maximize2, FileText } from "lucide-react";
 
 function PDFViewer({ pdfUrl, pdfName }) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -59,72 +52,52 @@ function PDFViewer({ pdfUrl, pdfName }) {
         fullscreen ? "fixed inset-0 z-50" : ""
       }`}
     >
-      {/* PDF Controls Header */}
-      <div className="bg-white border-b border-gray-300 p-3 flex items-center justify-between gap-4 flex-shrink-0 shadow-sm">
-        {/* Page Navigation */}
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
-            disabled={currentPage === 1}
-            title="Previous Page"
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-          <div className="px-3 py-1 bg-gray-100 rounded-lg">
-            <span className="text-sm font-medium text-gray-700">
-              Page {currentPage}
-            </span>
-          </div>
-          <button
-            onClick={() => setCurrentPage(currentPage + 1)}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-            title="Next Page"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
-        </div>
+      {/* PDF Controls Header - HIDDEN IN FULLSCREEN */}
+      {!fullscreen && (
+        <div className="bg-white border-b border-gray-300 p-3 flex items-center justify-between gap-4 flex-shrink-0 shadow-sm">
+          {/* Page Navigation */}
 
-        {/* PDF Name (Hidden on small screens) */}
-        <div className="hidden md:block flex-1 text-center">
-          <p
-            className="text-sm font-medium text-gray-700 truncate"
-            title={pdfName}
-          >
-            {pdfName}
-          </p>
-        </div>
-
-        {/* Zoom Controls */}
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setZoom(Math.max(50, zoom - 10))}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-            disabled={zoom <= 50}
-            title="Zoom Out"
-          >
-            <ZoomOut className="w-5 h-5" />
-          </button>
-          <div className="px-3 py-1 bg-gray-100 rounded-lg min-w-[60px] text-center">
-            <span className="text-sm font-medium text-gray-700">{zoom}%</span>
+          {/* PDF Name (Hidden on small screens) */}
+          <div className="hidden md:block text-center">
+            <p
+              className="text-sm font-medium text-gray-700 truncate"
+              title={pdfName}
+            >
+              {pdfName}
+            </p>
           </div>
-          <button
-            onClick={() => setZoom(Math.min(200, zoom + 10))}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-            disabled={zoom >= 200}
-            title="Zoom In"
-          >
-            <ZoomIn className="w-5 h-5" />
-          </button>
-          <button
-            onClick={() => setFullscreen(!fullscreen)}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors ml-2"
-            title={fullscreen ? "Exit Fullscreen" : "Fullscreen"}
-          >
-            <Maximize2 className="w-5 h-5" />
-          </button>
+
+          {/* Zoom Controls */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setZoom(Math.max(50, zoom - 10))}
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              disabled={zoom <= 50}
+              title="Zoom Out"
+            >
+              <ZoomOut className="w-5 h-5" />
+            </button>
+            <div className="px-3 py-1 bg-gray-100 rounded-lg min-w-[60px] text-center">
+              <span className="text-sm font-medium text-gray-700">{zoom}%</span>
+            </div>
+            <button
+              onClick={() => setZoom(Math.min(200, zoom + 10))}
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              disabled={zoom >= 200}
+              title="Zoom In"
+            >
+              <ZoomIn className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => setFullscreen(!fullscreen)}
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors ml-2"
+              title={fullscreen ? "Exit Fullscreen" : "Fullscreen"}
+            >
+              <Maximize2 className="w-5 h-5" />
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* PDF Display Area - SCROLLABLE */}
       <div className="flex-1 overflow-auto bg-gray-200 p-4">
@@ -142,7 +115,7 @@ function PDFViewer({ pdfUrl, pdfName }) {
               src={`${pdfUrl}#page=${currentPage}&view=FitH`}
               className="w-full border-0"
               style={{
-                height: "90vh",
+                height: fullscreen ? "100vh" : "90vh", // Adjust height for fullscreen
                 minHeight: "600px",
               }}
               title={pdfName}
@@ -168,7 +141,7 @@ function PDFViewer({ pdfUrl, pdfName }) {
       {fullscreen && (
         <button
           onClick={() => setFullscreen(false)}
-          className="fixed top-4 right-4 bg-red-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-red-700 transition-colors z-50 flex items-center gap-2"
+          className="fixed top-4 right-4 bg-red-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-red-700 transition-colors z-[100] flex items-center gap-2"
         >
           <span>✕</span>
           <span className="font-medium">Close Fullscreen</span>

@@ -347,54 +347,6 @@ function Dashboard() {
                   </div>
                 </div>
               )}
-
-              {/* Weak Topics */}
-              {stats.topicsAnalysis.weak.length > 0 && (
-                <div className="bg-gradient-to-br from-orange-50 via-red-50 to-pink-50 rounded-3xl shadow-lg border-2 border-orange-200 overflow-hidden">
-                  <div className="bg-gradient-to-r from-orange-600 to-red-600 px-6 py-5 text-white">
-                    <div className="flex items-center gap-3">
-                      <Target className="w-7 h-7" />
-                      <h3 className="text-xl font-bold">Needs Practice 📚</h3>
-                    </div>
-                  </div>
-                  <div className="p-6 space-y-4">
-                    {stats.topicsAnalysis.weak.map((topic, idx) => (
-                      <div
-                        key={idx}
-                        className="bg-white rounded-2xl p-5 border border-orange-200 shadow-sm hover:shadow-md transition-shadow"
-                      >
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="flex-1">
-                            <p className="font-bold text-gray-800 text-lg">
-                              {topic.name}
-                            </p>
-                            <p className="text-sm text-gray-600 mt-1">
-                              {topic.attempts} quizzes taken
-                            </p>
-                          </div>
-                          <div className="text-right">
-                            <div className="text-3xl font-bold text-orange-600">
-                              {topic.avgScore}%
-                            </div>
-                          </div>
-                        </div>
-                        <div className="relative h-3 bg-orange-100 rounded-full overflow-hidden">
-                          <div
-                            className="absolute inset-y-0 left-0 bg-gradient-to-r from-orange-500 to-red-500 rounded-full transition-all duration-500"
-                            style={{ width: `${topic.avgScore}%` }}
-                          />
-                        </div>
-                      </div>
-                    ))}
-                    <button
-                      onClick={() => (window.location.hash = "#videos")}
-                      className="w-full mt-4 px-6 py-4 bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-xl hover:from-orange-700 hover:to-red-700 font-semibold flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-                    >
-                      📹 Get Video Recommendations
-                    </button>
-                  </div>
-                </div>
-              )}
             </div>
           )}
 
@@ -434,17 +386,6 @@ function Dashboard() {
           )}
         </div>
       </div>
-
-      {/* PDF Viewer Section - Desktop always visible, Mobile toggle */}
-      {selectedPdf && (
-        <div
-          className={`${
-            showPdfViewer ? "block" : "hidden"
-          } lg:block lg:w-1/2 xl:w-2/5 border-l border-gray-200 bg-white`}
-        >
-          <PDFViewer pdfUrl={selectedPdf.url} pdfName={selectedPdf.name} />
-        </div>
-      )}
     </div>
   );
 }

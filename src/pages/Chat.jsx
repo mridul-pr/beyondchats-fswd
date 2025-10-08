@@ -141,20 +141,20 @@ function Chat() {
   }
 
   return (
-    <div className="flex h-full bg-gray-50">
+    <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
       <div
         className={`${
           sidebarOpen ? "block" : "hidden"
-        } md:block w-full md:w-72 bg-white border-r border-gray-200 flex flex-col absolute md:relative inset-0 md:inset-auto z-20 shadow-xl md:shadow-none`}
+        } md:block w-full md:w-72 bg-white border-r border-gray-200 flex flex-col absolute md:relative inset-0 md:inset-auto z-20 shadow-xl md:shadow-none max-h-[100dvh] overflow-hidden`}
       >
         {/* Sidebar Header */}
         <div className="relative bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 p-6 text-white overflow-hidden">
           <div className="absolute inset-0 bg-black opacity-5"></div>
           <div className="relative z-10 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-black bg-opacity-20 rounded-xl backdrop-blur-sm">
-                <MessageSquare className="w-6 h-6" />
+              <div className="p-2 bg-purple bg-opacity-20 rounded-xl backdrop-blur-sm">
+                <MessageSquare className="w-6 h-6 text-white" />
               </div>
               <h3 className="font-bold text-lg">Your Chats</h3>
             </div>
@@ -180,7 +180,7 @@ function Chat() {
         </div>
 
         {/* Chat List */}
-        <div className="flex-1 overflow-y-auto p-3 space-y-2">
+        <div className="flex-1 overflow-y-auto p-3 space-y-2 custom-scrollbar">
           {chats.length === 0 ? (
             <div className="text-center py-12 px-4">
               <div className="inline-block p-4 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-2xl mb-4">
@@ -231,7 +231,7 @@ function Chat() {
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col lg:flex-row">
         {/* Chat Section */}
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col overflow-hidden">
           {!currentChat ? (
             <div className="flex-1 flex items-center justify-center p-6">
               <div className="text-center max-w-2xl">
@@ -256,7 +256,7 @@ function Chat() {
           ) : (
             <>
               {/* Chat Header */}
-              <div className="relative bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 p-5 text-white overflow-hidden shadow-lg">
+              <div className="relative bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 p-2 text-white overflow-hidden shadow-lg flex-shrink-0">
                 <div className="absolute inset-0 bg-black opacity-5"></div>
                 <div className="relative z-10 flex items-center gap-3">
                   <button
@@ -265,9 +265,10 @@ function Chat() {
                   >
                     <MessageSquare className="w-5 h-5" />
                   </button>
-                  <div className="p-2 bg-black bg-opacity-20 rounded-xl backdrop-blur-sm">
-                    <Bot className="w-6 h-6" />
+                  <div className="p-2 bg-purple bg-opacity-20 rounded-xl backdrop-blur-sm">
+                    <Bot className="w-6 h-6 text-white" />
                   </div>
+
                   <div className="flex-1">
                     <h2 className="font-bold text-lg">{currentChat.title}</h2>
                     <p className="text-xs text-indigo-100">
@@ -286,159 +287,161 @@ function Chat() {
                 <div className="absolute -right-10 -bottom-10 w-32 h-32 bg-white opacity-10 rounded-full blur-2xl"></div>
               </div>
 
-              {/* Messages */}
-              <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 bg-gradient-to-br from-gray-50 to-gray-100">
-                {currentChat.messages.length === 0 && (
-                  <div className="text-center py-12">
-                    <div className="bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 rounded-3xl p-10 max-w-2xl mx-auto border-2 border-indigo-100 shadow-xl">
-                      <div className="inline-block p-4 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl mb-6">
-                        <Sparkles className="w-12 h-12 text-white" />
-                      </div>
-                      <h3 className="text-2xl font-bold text-gray-800 mb-4">
-                        👋 Hello! I'm your AI study companion
-                      </h3>
-                      <p className="text-gray-600 mb-6 text-lg">
-                        I can help you understand your coursebook better. Try
-                        asking:
-                      </p>
-                      <div className="grid gap-3 text-sm">
-                        <div className="bg-white rounded-xl p-4 text-left shadow-md hover:shadow-lg transition-shadow border border-indigo-100">
-                          <span className="font-semibold text-indigo-600">
-                            💡
-                          </span>{" "}
-                          "Explain the main concepts in this chapter"
+              {/* Messages + Input */}
+              <div className="flex-1 flex flex-col overflow-hidden">
+                {/* Messages */}
+                <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 bg-gradient-to-br from-gray-50 to-gray-100">
+                  {currentChat.messages.length === 0 && (
+                    <div className="text-center py-12">
+                      <div className="bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 rounded-3xl p-10 max-w-2xl mx-auto border-2 border-indigo-100 shadow-xl">
+                        <div className="inline-block p-4 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl mb-6">
+                          <Sparkles className="w-12 h-12 text-white" />
                         </div>
-                        <div className="bg-white rounded-xl p-4 text-left shadow-md hover:shadow-lg transition-shadow border border-purple-100">
-                          <span className="font-semibold text-purple-600">
-                            📖
-                          </span>{" "}
-                          "Give me examples of [topic]"
-                        </div>
-                        <div className="bg-white rounded-xl p-4 text-left shadow-md hover:shadow-lg transition-shadow border border-pink-100">
-                          <span className="font-semibold text-pink-600">
-                            ❓
-                          </span>{" "}
-                          "What is [concept] and why is it important?"
+                        <h3 className="text-2xl font-bold text-gray-800 mb-4">
+                          👋 Hello! I'm your AI study companion
+                        </h3>
+                        <p className="text-gray-600 mb-6 text-lg">
+                          I can help you understand your coursebook better. Try
+                          asking:
+                        </p>
+                        <div className="grid gap-3 text-sm">
+                          <div className="bg-white rounded-xl p-4 text-left shadow-md hover:shadow-lg transition-shadow border border-indigo-100">
+                            <span className="font-semibold text-indigo-600">
+                              💡
+                            </span>{" "}
+                            "Explain the main concepts in this chapter"
+                          </div>
+                          <div className="bg-white rounded-xl p-4 text-left shadow-md hover:shadow-lg transition-shadow border border-purple-100">
+                            <span className="font-semibold text-purple-600">
+                              📖
+                            </span>{" "}
+                            "Give me examples of [topic]"
+                          </div>
+                          <div className="bg-white rounded-xl p-4 text-left shadow-md hover:shadow-lg transition-shadow border border-pink-100">
+                            <span className="font-semibold text-pink-600">
+                              ❓
+                            </span>{" "}
+                            "What is [concept] and why is it important?"
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {currentChat.messages.map((msg) => (
-                  <div
-                    key={msg.id}
-                    className={`flex ${
-                      msg.role === "user" ? "justify-end" : "justify-start"
-                    } animate-fadeIn`}
-                  >
+                  {currentChat.messages.map((msg) => (
                     <div
-                      className={`max-w-3xl ${
-                        msg.role === "user" ? "w-auto" : "w-full"
-                      }`}
+                      key={msg.id}
+                      className={`flex ${
+                        msg.role === "user" ? "justify-end" : "justify-start"
+                      } animate-fadeIn`}
                     >
-                      <div className="flex items-start gap-3">
-                        {msg.role === "assistant" && (
-                          <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-                            <Bot className="w-6 h-6 text-white" />
-                          </div>
-                        )}
-                        <div className="flex-1">
-                          <div
-                            className={`rounded-2xl p-5 shadow-lg ${
-                              msg.role === "user"
-                                ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white"
-                                : "bg-white border border-gray-200"
-                            }`}
-                          >
-                            <p className="whitespace-pre-wrap leading-relaxed">
-                              {msg.content}
-                            </p>
+                      <div
+                        className={`max-w-3xl ${
+                          msg.role === "user" ? "w-auto" : "w-full"
+                        }`}
+                      >
+                        <div className="flex items-start gap-3">
+                          {msg.role === "assistant" && (
+                            <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                              <Bot className="w-6 h-6 text-white" />
+                            </div>
+                          )}
+                          <div className="flex-1">
+                            <div
+                              className={`rounded-2xl p-5 shadow-lg ${
+                                msg.role === "user"
+                                  ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white"
+                                  : "bg-white border border-gray-200"
+                              }`}
+                            >
+                              <p className="whitespace-pre-wrap leading-relaxed">
+                                {msg.content}
+                              </p>
 
-                            {/* Citations */}
-                            {msg.citations && msg.citations.length > 0 && (
-                              <div className="mt-5 pt-5 border-t border-gray-200">
-                                <p className="text-xs font-bold text-gray-600 mb-3 flex items-center gap-2">
-                                  <BookOpen className="w-4 h-4" />
-                                  Sources:
-                                </p>
-                                <div className="space-y-2">
-                                  {msg.citations.map((citation, idx) => (
-                                    <div
-                                      key={idx}
-                                      className="text-xs bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-3 border border-indigo-100"
-                                    >
-                                      <span className="font-bold text-indigo-600">
-                                        [Source {citation.source}]
-                                      </span>
-                                      <p className="text-gray-700 mt-1 leading-relaxed">
-                                        {citation.text}
-                                      </p>
-                                    </div>
-                                  ))}
+                              {msg.citations && msg.citations.length > 0 && (
+                                <div className="mt-5 pt-5 border-t border-gray-200">
+                                  <p className="text-xs font-bold text-gray-600 mb-3 flex items-center gap-2">
+                                    <BookOpen className="w-4 h-4" />
+                                    Sources:
+                                  </p>
+                                  <div className="space-y-2">
+                                    {msg.citations.map((citation, idx) => (
+                                      <div
+                                        key={idx}
+                                        className="text-xs bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-3 border border-indigo-100"
+                                      >
+                                        <span className="font-bold text-indigo-600">
+                                          [Source {citation.source}]
+                                        </span>
+                                        <p className="text-gray-700 mt-1 leading-relaxed">
+                                          {citation.text}
+                                        </p>
+                                      </div>
+                                    ))}
+                                  </div>
                                 </div>
-                              </div>
-                            )}
+                              )}
+                            </div>
+                            <p className="text-xs text-gray-500 mt-2 px-2">
+                              {new Date(msg.timestamp).toLocaleTimeString()}
+                            </p>
                           </div>
-                          <p className="text-xs text-gray-500 mt-2 px-2">
-                            {new Date(msg.timestamp).toLocaleTimeString()}
-                          </p>
-                        </div>
-                        {msg.role === "user" && (
-                          <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center shadow-lg">
-                            <User className="w-6 h-6 text-white" />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-
-                {loading && (
-                  <div className="flex justify-start">
-                    <div className="flex items-start gap-3">
-                      <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-                        <Bot className="w-6 h-6 text-white" />
-                      </div>
-                      <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-lg">
-                        <div className="flex items-center gap-3 text-gray-500">
-                          <div className="flex gap-1">
-                            <div className="w-2 h-2 bg-indigo-600 rounded-full animate-bounce"></div>
-                            <div className="w-2 h-2 bg-purple-600 rounded-full animate-bounce delay-100"></div>
-                            <div className="w-2 h-2 bg-pink-600 rounded-full animate-bounce delay-200"></div>
-                          </div>
-                          <span className="text-sm font-medium">
-                            Thinking...
-                          </span>
+                          {msg.role === "user" && (
+                            <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center shadow-lg">
+                              <User className="w-6 h-6 text-white" />
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
-                  </div>
-                )}
-              </div>
+                  ))}
 
-              {/* Input Area */}
-              <div className="bg-white border-t border-gray-200 p-4 md:p-6 shadow-lg">
-                <div className="max-w-4xl mx-auto flex gap-3">
-                  <input
-                    type="text"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onKeyPress={(e) =>
-                      e.key === "Enter" && !e.shiftKey && sendMessage()
-                    }
-                    placeholder="Ask anything about your coursebook..."
-                    disabled={loading}
-                    className="flex-1 px-5 py-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-gray-100 transition-all text-gray-800 placeholder-gray-400"
-                  />
-                  <button
-                    onClick={sendMessage}
-                    disabled={!input.trim() || loading}
-                    className="px-6 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed transition-all duration-300 flex items-center gap-2 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none"
-                  >
-                    <Send className="w-5 h-5" />
-                    <span className="hidden sm:inline">Send</span>
-                  </button>
+                  {loading && (
+                    <div className="flex justify-start">
+                      <div className="flex items-start gap-3">
+                        <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                          <Bot className="w-6 h-6 text-white" />
+                        </div>
+                        <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-lg">
+                          <div className="flex items-center gap-3 text-gray-500">
+                            <div className="flex gap-1">
+                              <div className="w-2 h-2 bg-indigo-600 rounded-full animate-bounce"></div>
+                              <div className="w-2 h-2 bg-purple-600 rounded-full animate-bounce delay-100"></div>
+                              <div className="w-2 h-2 bg-pink-600 rounded-full animate-bounce delay-200"></div>
+                            </div>
+                            <span className="text-sm font-medium">
+                              Thinking...
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Input Area */}
+                <div className="flex-none bg-white border-t border-gray-200 p-4 mb-15 shadow-lg">
+                  <div className="max-w-4xl mx-auto flex gap-3">
+                    <input
+                      type="text"
+                      value={input}
+                      onChange={(e) => setInput(e.target.value)}
+                      onKeyPress={(e) =>
+                        e.key === "Enter" && !e.shiftKey && sendMessage()
+                      }
+                      placeholder="Ask anything about your coursebook..."
+                      disabled={loading}
+                      className="flex-1 px-5 py-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-gray-100 transition-all text-gray-800 placeholder-gray-400"
+                    />
+                    <button
+                      onClick={sendMessage}
+                      disabled={!input.trim() || loading}
+                      className="px-6 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed transition-all duration-300 flex items-center gap-2 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none"
+                    >
+                      <Send className="w-5 h-5" />
+                      <span className="hidden sm:inline">Send</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </>
