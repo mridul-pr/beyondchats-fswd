@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { useApp } from "../context/AppContext";
 import { useState } from "react";
-import PDFViewer from "../components/PDFViewer";
+import PdfViewer from "../components/PdfViewer";
 
 const BASE_URL = "http://127.0.0.1:8000/api";
 
@@ -455,7 +455,7 @@ function Chat() {
               showPdfViewer ? "block" : "hidden"
             } lg:block lg:w-1/2 xl:w-2/5 border-l border-gray-200 bg-white`}
           >
-            <PDFViewer pdfUrl={selectedPdf.url} pdfName={selectedPdf.name} />
+            <PdfViewer pdfUrl={selectedPdf.url} pdfName={selectedPdf.name} />
           </div>
         )}
       </div>
