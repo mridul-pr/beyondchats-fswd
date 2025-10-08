@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 import { useApp } from "../context/AppContext";
 import { useMemo, useState } from "react";
-import PDFViewer from "../components/PDFViewer";
 
 function Dashboard() {
   const { quizAttempts, selectedPdf } = useApp();
