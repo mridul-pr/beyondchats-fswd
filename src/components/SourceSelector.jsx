@@ -24,6 +24,8 @@ function SourceSelector() {
       // should still make it the active one.
       const response = await uploadPDF(file);
 
+      console.log(response);
+
       if (!response.success) {
         throw new Error(response.error || "Upload failed");
       }
