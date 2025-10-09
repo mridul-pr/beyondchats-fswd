@@ -28,21 +28,21 @@ Fully responsive layout
 
 AI-powered MCQ generation (Google Gemini)
 
-Questions generated from actual PDF content
+Questions generated directly from uploaded PDF content
 
-Fallback quiz system when API fails
+Intelligent fallback quiz system
 
-Real-time answer validation & explanations
+Real-time answer validation with explanations
 
-Score calculation, tracking & unlimited new quizzes
+Score calculation, tracking, and unlimited new quizzes
 
 📈 Progress Tracking
 
 Analytics dashboard with charts & trends
 
-Track scores (average, best, worst)
+Average, best, and worst score tracking
 
-Topic-wise performance & improvement insights
+Topic-wise performance and improvement insights
 
 Quiz attempt history with timestamps
 
@@ -51,25 +51,27 @@ Quiz attempt history with timestamps
 
 Modern chat interface with sidebar history
 
-Start new chats, switch between sessions
+Create new chats and switch sessions
 
-Message timestamps, loading states, and mobile support
+Message timestamps and loading indicators
+
+Fully responsive mobile layout
 
 🔍 RAG Answers with Citations
 
-Vector database using ChromaDB
+Vector database powered by ChromaDB
 
-Context-aware, source-cited responses
+Context-aware responses with citations
 
-Quotes & page number references
+Snippet quotes and page number references
 
 🎥 YouTube Recommendations
 
-Personalized video suggestions for weak topics
+Personalized video suggestions based on weak topics
 
 Auto topic extraction from quiz analytics
 
-Direct search links to educational videos
+Direct links to educational videos on YouTube
 
 🛠 Tech Stack
 🧩 Frontend
@@ -101,9 +103,9 @@ Text Handling: LangChain
 ⚡ Installation & Setup
 Prerequisites
 
-Node.js ≥16
+Node.js ≥ 16
 
-Python ≥3.8
+Python ≥ 3.8
 
 Google Gemini API Key
 
@@ -111,9 +113,9 @@ Backend Setup
 # Navigate to backend
 cd src/backend
 
-# Create and activate venv
+# Create and activate virtual environment
 python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # Install dependencies
 pip install fastapi uvicorn python-multipart
@@ -124,13 +126,13 @@ pip install google-generativeai
 
 # Run backend
 python app.py
-# Runs at http://localhost:8000
+# → http://localhost:8000
 
 Frontend Setup
 cd src/frontend
 npm install
 npm start
-# Runs at http://localhost:3000
+# → http://localhost:3000
 
 Environment Variables
 # Frontend (.env)
@@ -142,49 +144,34 @@ GEMINI_API_KEY=your_key_here
 💡 How to Use
 
 Upload a PDF
-
-Click “Upload PDF” in the header.
-
-Wait for embeddings to generate.
+Click “Upload PDF” and wait for processing.
 
 Generate Quizzes
-
-Go to the Quiz page
-
-Click “Generate New Quiz”
-
-Answer and submit for instant results.
+Go to the Quiz page → Click “Generate New Quiz” → Answer & submit.
 
 Chat with AI
-
-Ask questions about your uploaded PDF.
-
-Get context-based answers with citations.
+Ask questions about your uploaded PDF → Get context-based answers with citations.
 
 Track Progress
-
-Visit the Dashboard to see your analytics.
-
-Identify strong & weak areas.
+Open Dashboard to analyze performance and trends.
 
 Watch Videos
-
-Get topic-based YouTube recommendations.
+Access personalized YouTube recommendations based on weak topics.
 
 🧩 Responsive Design
 
-Desktop: Full sidebar and split views
+🖥️ Desktop: Full sidebar, split views
 
-Tablet: Collapsible sidebars
+💻 Tablet: Collapsible sidebars
 
-Mobile: Bottom navigation & tabbed views
+📱 Mobile: Bottom navigation & tabbed views
 
 🧠 Development Journey
 Day	Focus	Highlights
 Day 1	Foundation	React + FastAPI setup, Context API, ChromaDB integration
 Day 2	Core Features	Quiz engine, Gemini integration, PDF viewer
-Day 3	Advanced	Chat with citations, RAG, video recommendations, dashboard
-Day 4	Polish	Mobile responsive, UX improvements, documentation
+Day 3	Advanced	Chat with citations, RAG, dashboard, video recommendations
+Day 4	Polish	Responsive design, UX improvements, documentation
 🤖 LLM Tools Used
 Tool	Usage
 Claude AI	Architecture, debugging, RAG logic
@@ -192,32 +179,32 @@ GitHub Copilot	Code completion & boilerplate
 ChatGPT	Research, troubleshooting, documentation
 ✨ Key Decisions
 Topic	Decision	Reason
-Vector DB	ChromaDB	Lightweight & local
+Vector DB	ChromaDB	Lightweight, no external DB needed
 AI Model	Gemini 2.5 Flash	Free, fast, reliable
 Storage	localStorage	Simple MVP persistence
-Quiz Type	MCQs only	Auto-gradable & quick
-YouTube	Search URLs	No API key needed
+Quiz Type	MCQs only	Auto-gradable, efficient
+YouTube	Search URLs	No API key required
 🎨 UI Highlights
 
-Gradient headers, shadows & rounded corners
+Gradient headers, rounded corners, and shadows
 
-Color-coded feedback (green/yellow/red)
+Color-coded performance indicators (🟢 ≥80%, 🟡 60–79%, 🔴 <60%)
 
-Clear navigation & accessibility features
+Clean navigation, accessibility, and loading states
 
 ⚠️ Known Limitations
 
-❌ SAQs/LAQs not auto-graded
+❌ SAQs/LAQs not implemented
 
 ❌ No persistent backend database
 
-❌ Large PDFs (>50MB) slow to process
+❌ Large PDFs (>50MB) may be slow
 
 ❌ No authentication system
 
 🔄 Future Improvements
 
- User Authentication
+ User authentication system
 
  PostgreSQL integration
 
@@ -231,11 +218,11 @@ Clear navigation & accessibility features
 
 🧪 Testing
 
-Manual testing (Chrome, Safari, Firefox)
+✅ Manual testing (Chrome, Safari, Firefox)
 
-Mobile tests (iOS + Android)
+✅ Mobile testing (iOS + Android)
 
-API testing via Postman
+✅ API validation via Postman
 
 🌐 Deployment
 Frontend (Vercel)
@@ -246,8 +233,11 @@ Backend (Hugging Face / Render)
 pip freeze > requirements.txt
 
 
-Deployed Space:
-🔗 https://juicybro-beyondchats-backend.hf.space
+Live Deployment:
+
+🖥️ Frontend: beyondchats-fswd-dun.vercel.app
+
+⚙️ Backend: juicybro-beyondchats-backend.hf.space
 
 📸 Screenshots
 Home	Quiz	Chat
@@ -260,15 +250,18 @@ Fork the repo
 
 Create a feature branch
 
-Commit changes (git commit -m "Add new feature")
+Commit your changes
+
+git commit -m "Add new feature"
+
 
 Push and open a Pull Request
 
 📄 License
 
-All code is the intellectual property of Mridul P.
-Developed for the BeyondChats internship assignment.
-Not for reuse without developer’s consent.
+This project is the intellectual property of Mridul P.
+Developed for the BeyondChats Internship Assignment.
+Use only with the developer’s consent.
 
 🙏 Acknowledgments
 
@@ -286,13 +279,16 @@ BeyondChats
 
 🚀 Live Demo
 
-Frontend: beyondchats-fswd-dun.vercel.app
+🔗 Frontend: beyondchats-fswd-dun.vercel.app
 
-Backend: juicybro-beyondchats-backend.hf.space
+🔗 Backend: juicybro-beyondchats-backend.hf.space
 
-🧑‍💻 Developer: Mridul Pramod
-📧 mridulpramod8@gmail.com
+🧑‍💻 Developer Info
 
-🔗 LinkedIn
+👨‍💻 Name: Mridul Pramod
+📧 Email: mridulpramod8@gmail.com
+
+🔗 Links:
+LinkedIn
  • GitHub
  • Portfolio
